@@ -9,33 +9,97 @@ import XCTest
 
 final class FibonacciUITests: XCTestCase {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
-        continueAfterFailure = false
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
-    }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-
-    @MainActor
-    func testExample() throws {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
-        app.launch()
-
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    @MainActor
-    func testLaunchPerformance() throws {
-        // This measures how long it takes to launch your application.
-        measure(metrics: [XCTApplicationLaunchMetric()]) {
-            XCUIApplication().launch()
-        }
-    }
+  func testInitialLoad() {
+    let app = XCUIApplication()
+    app.launch()
+    
+    let title = app.staticTexts["Fibonacci Calculator"]
+    let textfield = app.textFields.firstMatch
+    let textfieldsCount = app.textFields.count
+    
+    let headerText = app.staticTexts["Fibonacci Sequence"]
+    let leftColumnText = app.staticTexts["N"]
+    let rightColumnText = app.staticTexts["F(N)"]
+    
+    XCTAssertTrue(title.exists)
+    XCTAssertTrue(textfield.exists)
+    XCTAssertTrue(textfieldsCount == 1)
+    
+    XCTAssertTrue(!headerText.exists)
+    XCTAssertTrue(!leftColumnText.exists)
+    XCTAssertTrue(!rightColumnText.exists)
+  }
+  
+  func testEmptySummary() throws{
+    let app = XCUIApplication()
+    app.launch()
+    
+    let button = app.buttons["Summary"]
+    button.tap()
+    
+    let textCounts = app.staticTexts.count
+    let text1 = app.staticTexts["No Calculations to show."]
+    let text2 = app.staticTexts["Go back and start calculating some Fibonacci numbers!"]
+    
+    XCTAssertTrue(textCounts == 2)
+    XCTAssertTrue(text1.exists)
+    XCTAssertTrue(text2.exists)
+  }
+  
+  func testFibonacciZero() throws {
+    let app = XCUIApplication()
+    app.launch()
+    
+    let textfield = app.textFields.firstMatch
+    textfield.tap()
+    textfield.typeText("0")
+    
+    let button = app.buttons["Done"]
+    button.tap()
+    
+    let headerText = app.staticTexts["Fibonacci Sequence"]
+    let leftColumnText = app.staticTexts["N"]
+    let rightColumnText = app.staticTexts["F(N)"]
+    
+    let zeroText = app.staticTexts["0"]
+    
+    XCTAssertTrue(headerText.exists)
+    XCTAssertTrue(leftColumnText.exists)
+    XCTAssertTrue(rightColumnText.exists)
+    XCTAssertTrue(zeroText.exists)
+  }
+  
+  func testBigNumber() throws {
+    let app = XCUIApplication()
+    app.launch()
+    
+    let textfield = app.textFields.firstMatch
+    textfield.tap()
+    textfield.typeText("91")
+    
+    let warningText = app.staticTexts["Please enter a valid number between 0 and 90"]
+    
+    XCTAssertTrue(warningText.exists)
+  }
+  
+  func testSummaryNotEmpty() throws {
+    let app = XCUIApplication()
+    app.launch()
+    
+    let textfield = app.textFields.firstMatch
+    textfield.tap()
+    textfield.typeText("0")
+    
+    let button = app.buttons["Done"]
+    button.tap()
+    
+    let summaryButton = app.buttons["Summary"]
+    summaryButton.tap()
+    
+    let text1 = app.staticTexts["No Calculations to show."]
+    let text2 = app.staticTexts["Go back and start calculating some Fibonacci numbers!"]
+    
+    XCTAssertTrue(!text1.exists)
+    XCTAssertTrue(!text2.exists)
+  }
 }

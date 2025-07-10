@@ -14,7 +14,7 @@ struct ResultsView: View {
   var body: some View {
     if calculations.isEmpty {
       Group {
-        Text(" No Calculations to show.")
+        Text("No Calculations to show.")
           .font(.headline)
         Text("Go back and start calculating some Fibonacci numbers!")
           .font(.subheadline)

@@ -37,7 +37,8 @@ struct CalculationView: View {
           // Display Error Case
           if !viewModel.isValidInput(viewModel.inputNumber) && !viewModel.inputNumber.isEmpty {
             Text("Please enter a valid number between 0 and 90")
-              .errorLabelStyle()
+              .foregroundColor(.red)
+              .font(.caption)
               .padding(.horizontal)
           }
           
