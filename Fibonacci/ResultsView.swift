@@ -26,11 +26,7 @@ struct ResultsView: View {
                                               leftColumnTitle: "N",
                                               rightColumnTitle: "Time (ms)")) {
           ForEach(calculations) { calculation in
-            HStack {
-              Text("\(calculation.n)")
-              Spacer()
-              Text(String(format: "%.4f", calculation.calculationTime))
-            }
+            SingleCalculationView(singleFibonacciCalculation: calculation)
           }
         }
       }
